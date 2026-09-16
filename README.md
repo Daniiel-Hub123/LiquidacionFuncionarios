@@ -65,42 +65,36 @@ El **Sistema de Liquidación de Funcionarios** permite a la institución llevar 
 El proyecto sigue una arquitectura **MVC (Modelo - Vista - Controlador)** estricta, lo que garantiza la separación de responsabilidades, mantenibilidad y escalabilidad del código:
 
 ```mermaid
-graph TD
-    subgraph Vistas ["🖥️ Capa de Vista (Swing Forms)"]
-        Inicio["Inicio.java"]
-        Login["Login.java"]
-        Registro["Registro.java"]
-        InformacionPersonal["InformacionPersonal.java"]
-        HomeVacaciones["HomeVacaciones.java"]
-        RegistroDiario["RegistroDiario.java"]
-        CuentaPersonal["CuentaPersonal.java"]
+flowchart TD
+    subgraph VISTAS ["🖥️ CAPA DE VISTA (Interfaz Gráfica Swing)"]
+        direction LR
+        V_AUTH["🔐 Autenticación & Acceso<br/>Inicio.java | Login.java | Clave.java"]
+        V_USER["👥 Gestión de Personal & Perfiles<br/>Registro.java | InformacionPersonal.java"]
+        V_WORK["⏱️ Asistencia & Vacaciones<br/>RegistroDiario.java | HomeVacaciones.java"]
     end
 
-    subgraph Controladores ["⚙️ Capa de Controladores"]
-        ControlInicio["ControlInicio.java"]
-        ControlLogin["ControlLogin.java"]
-        ControlRegistro["ControlRegistro.java"]
-        ControlClave["ControlClave.java"]
+    subgraph CONTROLADORES ["⚙️ CAPA DE CONTROLADORES (Lógica de Negocio)"]
+        direction LR
+        C_INICIO["ControlInicio.java"]
+        C_LOGIN["ControlLogin.java"]
+        C_REGISTRO["ControlRegistro.java"]
+        C_CLAVE["ControlClave.java"]
     end
 
-    subgraph Modelos ["💾 Capa de Modelo & Persistencia"]
-        ModeloUsuario["ModeloUsuario.java"]
-        ModeloCuenta["ModeloCuenta.java"]
-        ModeloPersona["ModeloPersona.java"]
-        ModeloRegistro["ModeloRegistro.java"]
-        ModeloPeriodo["ModeloPeriodo.java"]
-        Seguridad["Seguridad.java (Encriptación AES)"]
-        ConexionPG["ConexionPG.java (JDBC PostgreSQL)"]
+    subgraph MODELOS ["💾 CAPA DE MODELO & PERSISTENCIA"]
+        direction LR
+        M_ENT["📦 Modelos de Entidad<br/>Usuario | Persona | Registro | Periodo | Rol"]
+        M_SEG["🔒 Cifrado & Seguridad<br/>Seguridad.java (AES / SHA-1)"]
+        M_CON["🔌 Conector de Datos<br/>ConexionPG.java (JDBC)"]
     end
 
-    subgraph BaseDatos ["🗄️ Base de Datos"]
-        PostgreSQL[("PostgreSQL\n(gobernacion)")]
+    subgraph BD ["🗄️ BASE DE DATOS RELACIONAL"]
+        DB[("PostgreSQL Server<br/>Base de Datos: gobernacion")]
     end
 
-    Vistas <--> Controladores
-    Controladores <--> Modelos
-    Modelos <--> ConexionPG
-    ConexionPG <--> PostgreSQL
+    VISTAS <==> CONTROLADORES
+    CONTROLADORES <==> MODELOS
+    M_CON <==> DB
 ```
 
 ---
